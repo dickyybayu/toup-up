@@ -1,162 +1,85 @@
-1. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+# Toup-up
 
-step-by-step
-1. Buat direktori baru dengan nama toup-up 
-2. Buat virtual environment pada direktori tersebut dengan perintah python -m venv env di command prompt
-3. Aktifkan virtual environment dengan env\Scripts\activate
-4. Di dalam direktori yang sama, buat berkas requirements.txt dan menambahkan beberapa dependencies
-django
-gunicorn
-whitenoise
-psycopg2-binary
-requests
-urllib3
-5. Melakukan instalasi dependencies dengan perintah 
-pip install -r requirements.txt
-6. Buat proyek Django bernama toup_up dengan perintah django-admin startproject toup_up .
-7. Tambahkan "localhost" dan "127.0.0.1" pada ALLOWED_HOST di settings.py sehingga menjadi ALLOWED_HOSTS = ["localhost", "127.0.0.1"] 
-8. Menjalankan python manage.py runserver dan membuka http://localhost:8000 di website untuk memastikan aplikasi Django berhasil jalan
-9. Menghentikan server dengan Ctrl+C dan menonaktifkan virtual environment dengan perintah deactivate
-10. Buat repositori Github baru bernama toup-up dengan visibilitas public
-11. inisiasi direktori lokal toup-up sebagai repositori Git dengan perintah git init 
-12. Menambah berkas .gitignore yang berisi
-# Django
-*.log
-*.pot
-*.pyc
-__pycache__
-db.sqlite3
-media
+### A. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 
-# Backup files
-*.bak
+1. Aktifkan virtual environment dan install dependencies yang dibutuhkan
+2. Membuat proyek Django baru dengan menggunakan perintah `django-admin startproject toup_up .`
+3. Membuat aplikasi main dengan perintah `python manage.py startapp main`
+4. Membuat model Product di `models.py` dengan atribut name, price, description, quantity, dan available.
+```python
+    from django.db import models
 
-# If you are using PyCharm
-# User-specific stuff
-.idea/**/workspace.xml
-.idea/**/tasks.xml
-.idea/**/usage.statistics.xml
-.idea/**/dictionaries
-.idea/**/shelf
+    class Product(models.Model):
+        name = models.CharField(max_length=100)
+        price = models.IntegerField()
+        description = models.TextField()
+        quantity = models.IntegerField()
+        available = models.BooleanField()
+```
+5. Menyiapkan `main.html` yang menampilkan nama aplikasi serta nama dan kelas saya di dalam direktori templates
+6. Membuat fungsi `show_main` di `views.py` yang akan dikembalikan ke `main.html` untuk menampilkan nama aplikasi serta nama dan kelas saya
 
-# AWS User-specific
-.idea/**/aws.xml
+```python
+    from django.shortcuts import render
 
-# Generated files
-.idea/**/contentModel.xml
-.DS_Store
+    def show_main(request):
+    context = {
+        "application": "Toup Up",
+        "name": "Dicky Bayu Sadewo",
+        "class": "PBP E"
+    }
 
-# Sensitive or high-churn files
-.idea/**/dataSources/
-.idea/**/dataSources.ids
-.idea/**/dataSources.local.xml
-.idea/**/sqlDataSources.xml
-.idea/**/dynamic.xml
-.idea/**/uiDesigner.xml
-.idea/**/dbnavigator.xml
+    return render(request, "main.html", context)
+```
+7. Membuat sebuah routing pada `urls.py` aplikasi main untuk memetakan fungsi yang telah dibuat pada `views.py`
+```python
+    from django.urls import path
+    from main.views import show_main
 
-# Gradle
-.idea/**/gradle.xml
-.idea/**/libraries
+    app_name = 'main'
 
-# File-based project format
-*.iws
+    urlpatterns = [
+        path('', show_main, name='show_main'),
+    ]    
+```
+8. Melakukan routing pada proyek agar dapat menjalankan aplikasi main
+```python
+    from django.contrib import admin
+    from django.urls import path, include
 
-# IntelliJ
-out/
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        path('', include('main.urls')),
+    ]
+```
+9. Terakhir, melakukan deployment ke PWS terhadap aplikasi yang sudah dibuat sehingga nantinya dapat diakses melalui internet
 
-# JIRA plugin
-atlassian-ide-plugin.xml
+### B. Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara urls.py, views.py, models.py, dan berkas html.
 
-# Python
-*.py[cod]
-*$py.class
+![Bagan Request-Response](diagram.jpeg)
 
-# Distribution / packaging
-.Python build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-*.manifest
-*.spec
+Penjelasan:
+1. Client mengakses aplikasi website melalui internet dengan mengirimkan request ke URL utama.
+2. Request dari internet diterima oleh `urls.py` yang di routing ke `views.py` untuk merender HTML template dan merequest model data ke `models.py`.
+3. Fungsi `show_main` di `views.py` sudah mempunyai pre-defined model data sehingga hanya merender HTML template (main.html).
+4. `main.html` yang sudah di-render di `views.py` akan dikirimkan ke internet dan diteruskan ke client sebagai response.
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
 
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.coverage
-.coverage.*
-.cache
-.pytest_cache/
-nosetests.xml
-coverage.xml
-*.cover
-.hypothesis/
 
-# Jupyter Notebook
-.ipynb_checkpoints
+### C. Jelaskan fungsi git dalam pengembangan perangkat lunak!
+Fungsi-fungsi git dalam pengembangan perangkat lunak:
+- Melacak Perubahan Kode: Git memungkinkan pengembang melacak setiap perubahan yang dibuat pada kode, dari perubahan kecil hingga besar. 
+- Kolaborasi: Git memungkinkan banyak pengembang bekerja secara bersamaan pada proyek yang sama.
+- Pengelolaan Versi dan Riwayat Perubahan: Git menyimpan riwayat dari setiap versi proyek yang pernah dibuat.
+- Branching: Git memungkinkan pembuatan branch, yaitu cabang kode yang terpisah dari cabang utama sehingga pengembang dapat mengembangkan fitur baru, memperbaiki bug, atau melakukan eksperimen tanpa menggangu proyek utama.
 
-# pyenv
-.python-version
+### D. Menurut Anda, dari semua framework yang ada, mengapa framework Django dijadikan permulaan pembelajaran pengembangan perangkat lunak?
+Menurut saya, Django dijadikan permulaan pembelajaran pengembangan perangkat lunak karena:
+- Kemudahan Penggunaan dan Dokumentasi yang Lengkap: Dokumentasi Django sangat lengkap dan mudah dipahami, sehingga memudahkan pemula seperti saya untuk mempelajari konsep pengembangan web sambil memahami fitur-fitur dasar framework.
+- Skalabilitas dan Fleksibilitas: Django cukup kuat dan scalable untuk proyek besar.
+- Security: Django memiliki fitur keamanan bawaan yang membantu melindungi aplikasi dari ancaman cyber.
+- Arsitektur Model-View-Template (MVT) : Django menggunakan arsitektur MVT (Model-View-Template), hal ini membantu pemula memahami cara kerja aplikasi web dengan pemisahan logika bisnis, tampilan, dan data. 
+- Pengelolaan Database yang Mudah: Django memiliki Object-Relational-Mapping (ORM) bawaan, yang memungkinkan pengembang berinteraksi dengan database hanya dengan menggunakan kode python tanpa perlu menulis SQL secara langsung.
 
-# celery
-celerybeat-schedule.*
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# mkdocs documentation
-/site
-
-# mypy
-.mypy_cache/
-
-# Sublime Text
-*.tmlanguage.cache
-*.tmPreferences.cache
-*.stTheme.cache
-*.sublime-workspace
-*.sublime-project
-
-# sftp configuration file
-sftp-config.json
-
-# Package control specific files Package
-Control.last-run
-Control.ca-list
-Control.ca-bundle
-Control.system-ca-bundle
-GitHub.sublime-settings
-
-# Visual Studio Code
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history
-13. Melakukan add, commit dan push dari direktori repositori lokal
-14. 
+### E. Mengapa model pada Django disebut sebagai ORM?
+Model pada Django disebut sebagai ORM (Object-Relational-Mapping) karena fungsinya sebagai penghubung antara model objek dalam kode Python dengan tabel dalam database relasional. Hal ini memungkinkan pengembang untuk berinteraksi dengan database relasional menggunakan kode Python, tanpa perlu menulis query SQL secara langsung.
