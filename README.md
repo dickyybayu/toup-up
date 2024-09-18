@@ -299,16 +299,16 @@ def show_json_by_id(request, id):
 ```
 ## Screenshot Postman
 ### XML
-![XML](./screenshot/xml.png)
+![XML](./screenshot_postman/xml.png)
 
 ### JSON
-![JSON](./screenshot/json.png)
+![JSON](./screenshot_postman/json.png)
 
 ### XML by ID
-![XML by ID](./screenshot/xml_by_id.png)
+![XML by ID](./screenshot_postman/xml_id.png)
 
 ### JSON by ID
-![JSON by ID](./screenshot/json_by_id.png)
+![JSON by ID](./screenshot_postman/json_id.png)
 
 
 
