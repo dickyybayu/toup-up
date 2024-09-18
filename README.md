@@ -1,5 +1,14 @@
 # Toup-up
 
+Nama : Dicky Bayu Sadewo
+
+NPM : 2306275784
+
+Kelas : PBP E
+
+## Deployment Link
+https://dicky-bayu31-toupup.pbp.cs.ui.ac.id/
+
 # Tugas 2
 
 ### A. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
