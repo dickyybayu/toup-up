@@ -305,10 +305,10 @@ def show_json_by_id(request, id):
 ![JSON](./screenshot_postman/json.png)
 
 ### XML by ID
-![XML by ID](./screenshot_postman/xml_id.png)
+![XML by ID](./screenshot_postman/xml_by_id.png)
 
 ### JSON by ID
-![JSON by ID](./screenshot_postman/json_id.png)
+![JSON by ID](./screenshot_postman/json_by_id.png)
 
 
 
