@@ -352,9 +352,9 @@ Authentication di Django ditangani melalui sistem otentikasi bawaan `django.cont
 Django mengingat pengguna yang telah login dengan menggunakan session dan cookies. Ketika pengguna login, Django akan membuat sebuah session yang menyimpan informasi pengguna, lalu Django akan memberikan session ID yang disimpan di browser pengguna sebagai cookie. Setiap kali pengguna berinteraksi dengan server, cookie yang mengandung session ID dikirimkan kembali ke server. Django menggunakan session ID tersebut untuk mengambil data sesi dari server dan memastikan bahwa pengguna tersebut masih dalam status login.
 
 Kegunaan lain dari cookies:
-    - Menyimpan Preferensi Pengguna: Cookies dapat menyimpan preferensi pengguna seperti pengaturan bahasa dan tampilan yang dipilih.
-    - Melacak Aktivitas Pengguna: Cookies dapat digunakan untuk melacak aktivitas pengguna seperti halaman yang dikunjungi atau produk yang dilihat
-    - Menyimpan token keamanan: Cookies dapat digunakan untuk menyimpan token keamanan, seperti token CSRF (Cross-Site Request Forgery) yang melindungi dari serangan siber.
+- Menyimpan Preferensi Pengguna: Cookies dapat menyimpan preferensi pengguna seperti pengaturan bahasa dan tampilan yang dipilih.
+- Melacak Aktivitas Pengguna: Cookies dapat digunakan untuk melacak aktivitas pengguna seperti halaman yang dikunjungi atau produk yang dilihat
+- Menyimpan token keamanan: Cookies dapat digunakan untuk menyimpan token keamanan, seperti token CSRF (Cross-Site Request Forgery) yang melindungi dari serangan siber.
 
 Tidak semua cookies aman untuk digunakan, karena cookies bisa digunakan dalam serangan seperti XSS dan CSRF. Oleh karena itu, Django menyediakan pengaturan seperti HttpOnly dan Secure Cookies untuk mengurangi risiko tersebut.
 
@@ -494,3 +494,510 @@ Tidak semua cookies aman untuk digunakan, karena cookies bisa digunakan dalam se
         quantity = models.IntegerField()
         available = models.BooleanField()
 ```
+
+# Tugas 5
+
+### Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+
+Dalam CSS, jika terdapat beberapa selektor yang berlaku pada suatu elemen HTML, urutan prioritas selektor tersebut diatur berdasarkan aturan yang sudah ditentukan dengan aturan berikut:
+
+1. Important Rule, aturan `!important` akan menjadi prioritas tertinggi dibandingkan aturan lainnya.
+2. Inline Styles, aturan inline styles akan selalu didahulukan dibandingkan aturan CSS eksternal atau internal yang lain.
+3. ID Selector, aturan ID selector memiliki prioritas yang lebih tinggi daripada Class,atribut, atau tag HTML biasa.
+4. Class Selector, aturan Class selector memiliki prioritas lebih rendah dibandingkan ID, tetapi lebih tinggi dari tag HTML.
+5. Tag Selector, aturan Tag selector menjadi prioritas lebih renda daripada aturan lainnya di atas.
+6. Universal Selector, Combinators, Inheritance, aturan ini memiliki prioritas paling rendah.
+
+### B. Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design!
+
+Responsive design menjadi konsep yang penting dalam pengembangan aplikasi web karena pengguna pengguna saat ini mengakses website dari berbagai perangkat dengan ukuran layar yang berbeda, seperti desktop, tablet, dan smartphone. Responsive design dapat memastikan tampilan dan fungsionalitas website tetap optimal di semua perangkat, meningkatkan pengalaman pengguna dan aksesibilitas. Dari sisi pengembangan, responsive design juga dapat menghemat waktu dan biaya, karena hanya perlu mengembangkan satu situs yang bisa berfungsi di berbagai perangkat. 
+
+Contoh aplikasi yang sudah menerapkan responsive design:
+- X (Twitter)
+- Traveloka
+- Tokopedia
+
+Contoh aplikasi yang belum menerapkan responsive design:
+- PWS
+- Beberapa aplikasi lama seperti aplikasi pemerintah atau UMKM yang belum mengadopsi responsive design.
+
+### C. Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+
+- Margin, margin merupakan sebuah ruang kosong di luar elemen. Margin memisahkan jarak antara elemen tersebut dengan elemen lain di sekitarnya. Margin tidak memiliki warna dan bersifat transparan.
+implementasi:
+```python
+    div {
+        margin-top: 10px;
+        margin-right: 30px;
+        margin-bottom: 20px;
+        margin-left: 25px;
+    }
+```
+- Border, border merupakan garis yang mengelilingi elemen di antara padding dan margin. Border dapat memiliki warna, ketebalan, dan styling yang bisa kita atur sendiri.
+implementasi:
+```python
+    div {
+        border-top: 2px dashed gray;
+        border-right: 6px solid blue;
+        border-bottom: 2px dotted green;
+        border-left: 3px double yellow;
+    }
+```
+- Padding, padding merupakan ruang di dalam elemen, antara konten elemen dan border elemen tersebut. Padding bertujuan untuk menjaga jarak antara konten dan border.
+implementasi:
+```python
+    div {
+        padding-top: 16px;
+        padding-right: 20px;
+        padding-bottom: 15px;
+        padding-left: 18px;
+    }
+```
+
+### D. Jelaskan konsep flexbox dan grid layout beserta kegunaannya!
+
+- Flexbox:
+    Flexbox merupakan model layout yang dirancang untuk menyusun elemen dalam satu dimensi, secara horizontal maupun vertikal. Flexbox sangat cocok untuk mengelola layout yang dinamis dan fleksibel, di mana elemen bisa disusun untuk mengisi ruang kosong di container.
+
+    Kegunaan:
+    - Mengatur elemen-elemen secara vertikal dan horizontal dengan mudah.
+    - Mengatur jarak elemen dan mendistribusikan ruang kosong di antara elemen.
+    - Mengatur elemen agar responsif, seperti membuat elemen menyesuaikan ukuran layar secara otomatis.
+
+- Grid:
+    Grid merupakan sistem layout dua dimensi yang lebih kompleks dibandingkan flexbox, memungkinkan kita untuk mengatur elemen dalam baris dan kolom secara bersamaan. Dengan grid, kita dapat mengatur bagaimana elemen disusun dalam bentuk tabel atau kotak yang lebih terstuktur.
+
+    Kegunaan:
+    - Mengatur elemen-elemen secara vertikal dan horizontal (dua dimensi).
+    - Mengatur layout yang lebih kompleks, seperti dashboard, galeri, atau tampilan produk e-commerce.
+    - Mengatur tata letak secara detail, seperti mengatur ukuran kolom, baris, dan bagaimana elemen-elemen ditempatkan dalam grid.
+
+
+### E. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+
+1. Menambahkan Tailwind di `base.html`
+```python
+    <head>
+    {% block meta %}
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% endblock meta %}
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    </head>
+```
+2. Menambahkan fungsi `edit_product` dan `delete_product` pada `views.py`
+```python
+    def edit_product(request, id):
+        product = Product.objects.get(pk=id)
+        form = ProductForm(request.POST or None, instance=product)
+
+        if form.is_valid() and request.method == "POST":
+            form.save()
+            return HttpResponseRedirect(reverse('main:show_main'))
+
+        context = {'form': form}
+        return render(request, "edit_product.html", context)
+
+    def delete_product(request, id):
+        product = Product.objects.get(pk=id)
+        product.delete()
+        return HttpResponseRedirect(reverse('main:show_main'))
+```
+3. Melakukan routing dari kedua fungsi tersebut pada `urls.py`
+```python
+    path('edit-product/<uuid:id>', edit_product, name='edit_product'),
+    path('delete/<uuid:id>', delete_product, name='delete_product')
+```
+4. Membuat `global.css` untuk mengatur tampilan web secara general di `/static/css`
+```python
+    .form-style form input, form textarea, form select {
+        width: 100%;
+        padding: 0.5rem;
+        border: 2px solid #bcbcbc;
+        border-radius: 0.375rem;
+    }
+    .form-style form input:focus, form textarea:focus, form select:focus {
+        outline: none;
+        border-color: #674ea7;
+        box-shadow: 0 0 0 3px #674ea7;
+    }
+    @keyframes shine {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+    }
+    .animate-shine {
+        background: linear-gradient(120deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.3));
+        background-size: 200% 100%;
+        animation: shine 3s infinite;
+    }
+```
+5. Membuat `navbar.html` pada folder `templates/` di root directory
+```python
+    <nav class="bg-gray-900 shadow-lg fixed top-0 left-0 z-40 w-screen">
+        <div class="max-w-[95rem] mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <div class="flex items-center">
+            <h1 class="text-2xl font-bold text-center text-blue-500">Toup Up</h1>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-16">
+            {% if user.is_authenticated %}
+                <a href="#" class="text-gray-300 hover:text-white transition duration-300">Home</a>
+                <a href="#" class="text-gray-300 hover:text-white transition duration-300">Products</a>
+                <a href="#" class="text-gray-300 hover:text-white transition duration-300">Categories</a>
+                <a href="#" class="text-gray-300 hover:text-white transition duration-300">Cart</a>
+                <span class="text-gray-300 mr-4">Welcome, {{ user.username }}</span>
+
+                <a href="{% url 'main:logout' %}" class="text-center bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                Logout
+                </a>
+            {% else %}
+                <a href="{% url 'main:login' %}" class="text-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300 mr-2">
+                Login
+                </a>
+                <a href="{% url 'main:register' %}" class="text-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                Register
+                </a>
+            {% endif %}
+            </div>
+    
+            <div class="md:hidden flex items-center">
+            <button class="mobile-menu-button">
+                <svg class="w-6 h-6 text-white" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                <path d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+            </div>
+        </div>
+        </div>
+    
+        <div class="mobile-menu hidden md:hidden bg-gray-800 px-4 w-full md:max-w-full">
+        <div class="pt-2 pb-3 space-y-4 mx-auto flex flex-col">
+            {% if user.is_authenticated %}
+            <a href="#" class="text-gray-300 hover:text-white transition duration-300">Home</a>
+            <a href="#" class="text-gray-300 hover:text-white transition duration-300">Products</a>
+            <a href="#" class="text-gray-300 hover:text-white transition duration-300">Categories</a>
+            <a href="#" class="text-gray-300 hover:text-white transition duration-300">Cart</a>        
+            <span class="block text-gray-300">Welcome, {{ user.username }}</span>
+            <a href="{% url 'main:logout' %}" class="block text-center bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                Logout
+            </a>
+            {% else %}
+            <a href="{% url 'main:login' %}" class="block text-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300 mb-2">
+                Login
+            </a>
+            <a href="{% url 'main:register' %}" class="block text-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                Register
+            </a>
+            {% endif %}
+        </div>
+        </div>
+    </nav>
+    <script>
+        const btn = document.querySelector("button.mobile-menu-button");
+        const menu = document.querySelector(".mobile-menu");
+    
+        btn.addEventListener("click", () => {
+        menu.classList.toggle("hidden");
+        });
+    </script>
+  
+```
+6. Menambahkan path untuk static folder pada `settings.py`
+```python
+    STATIC_URL = '/static/'
+    if DEBUG:
+        STATICFILES_DIRS = [
+            BASE_DIR / 'static' 
+        ]
+    else:
+        STATIC_ROOT = BASE_DIR / 'static' 
+```
+7. Membuat tampilan `login.html` pada subdirektori `main/templates/` seperti berikut:
+```python
+    {% extends 'base.html' %}
+
+    {% block meta %}
+    <title>Login</title>
+    {% endblock meta %}
+
+    {% block content %}
+    <div class="min-h-screen flex items-center justify-center w-screen bg-gray-800 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8 bg-gray-900 p-8 rounded-lg shadow-lg">
+        <div>
+        <h2 class="mt-6 text-center text-blue-500 text-3xl font-extrabold">
+            Login to your account
+        </h2>
+        </div>
+        <form class="mt-8 space-y-6" method="POST" action="">
+        {% csrf_token %}
+        <input type="hidden" name="remember" value="true">
+        <div class="rounded-md shadow-sm -space-y-px">
+            <div>
+            <label for="username" class="sr-only">Username</label>
+            <input id="username" name="username" type="text" required class="appearance-none rounded-none relative block w-full px-3 py-2 bg-gray-700 border border-gray-600 placeholder-gray-400 text-white rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Username">
+            </div>
+            <div>
+            <label for="password" class="sr-only">Password</label>
+            <input id="password" name="password" type="password" required class="appearance-none rounded-none relative block w-full px-3 py-2 bg-gray-700 border border-gray-600 placeholder-gray-400 text-white rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Password">
+            </div>
+        </div>
+
+        <div>
+            <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+            Sign in
+            </button>
+        </div>
+        </form>
+
+        {% if messages %}
+        <div class="mt-4">
+        {% for message in messages %}
+        {% if message.tags == "success" %}
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">{{ message }}</span>
+            </div>
+        {% elif message.tags == "error" %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">{{ message }}</span>
+            </div>
+        {% else %}
+            <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">{{ message }}</span>
+            </div>
+        {% endif %}
+        {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="text-center mt-4">
+        <p class="text-sm text-gray-300">
+            Don't have an account yet?
+            <a href="{% url 'main:register' %}" class="font-medium text-blue-500 hover:text-blue-600">
+            Register Now
+            </a>
+        </p>
+        </div>
+    </div>
+    </div>
+    {% endblock content %}
+
+```
+8. Membuat tampilan `register.html` 
+```python
+    {% extends 'base.html' %}
+
+    {% block meta %}
+    <title>Register</title>
+    {% endblock meta %}
+
+    {% block content %}
+    <div class="min-h-screen flex items-center justify-center bg-gray-800 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8 bg-gray-900 p-8 rounded-lg shadow-lg form-style">
+        <div>
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-blue-500">
+            Create your account
+        </h2>
+        </div>
+        <form class="mt-8 space-y-6" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="remember" value="true">
+        <div class="rounded-md shadow-sm -space-y-px">
+            {% for field in form %}
+            <div class="{% if not forloop.first %}mt-4{% endif %}">
+                <label for="{{ field.id_for_label }}" class="mb-2 font-semibold text-white">
+                {{ field.label }}
+                </label>
+                <div class="relative">
+                {{ field }}
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    {% if field.errors %}
+                    <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                    {% endif %}
+                </div>
+                </div>
+                {% if field.errors %}
+                {% for error in field.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                {% endfor %}
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div>
+            <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition">
+            Register
+            </button>
+        </div>
+        </form>
+
+        {% if messages %}
+        <div class="mt-4">
+        {% for message in messages %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">{{ message }}</span>
+        </div>
+        {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="text-center mt-4">
+        <p class="text-sm text-gray-300">
+            Already have an account?
+            <a href="{% url 'main:login' %}" class="font-medium text-blue-500 hover:text-blue-600">
+            Login here
+            </a>
+        </p>
+        </div>
+    </div>
+    </div>
+    {% endblock content %}
+
+```
+9. Membuat `card_product.html` untuk menampilkan atribut-atribut product, mengedit, dan juga menghapus product. 
+```python
+    <div class="bg-gray-900 shadow-lg rounded-lg overflow-hidden border border-blue-500 transition-transform duration-300 hover:scale-105 hover:border-blue-400">
+    <div class="bg-gray-900 text-white p-4 border-b border-blue-500">
+        <h3 class="text-xl font-bold mb-2">{{ product.name }}</h3>
+    </div>
+    
+    <div class="p-4 space-y-4">
+        <div class="space-y-1">
+        <p class="text-blue-400 font-semibold">Price:</p>
+        <p class="text-white">${{ product.price }}</p>
+        </div>
+
+        <div class="space-y-1">
+        <p class="text-blue-400 font-semibold">Description:</p>
+        <p class="text-gray-300">{{ product.description|truncatewords:20 }}</p>
+        </div>
+
+        <div class="space-y-1">
+        <p class="text-blue-400 font-semibold">Quantity Available:</p>
+        <p class="text-white">{{ product.quantity }}</p>
+        </div>
+
+        <div class="space-y-1">
+        <p class="text-blue-400 font-semibold">Availability:</p>
+        {% if product.available %}
+            <span class="text-green-500 font-bold">In Stock</span>
+        {% else %}
+            <span class="text-red-500 font-bold">Out of Stock</span>
+        {% endif %}
+        </div>
+    </div>
+
+    <div class="flex justify-between items-center bg-gray-900 p-4 rounded-b-lg border-t border-blue-500">
+        <a href="{% url 'main:edit_product' product.pk %}" class="bg-yellow-500 hover:bg-yellow-600 text-white rounded-full p-2 transition duration-300 shadow-md">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+        </svg>
+        </a>
+        <a href="{% url 'main:delete_product' product.pk %}" class="bg-red-500 hover:bg-red-600 text-white rounded-full p-2 transition duration-300 shadow-md">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+        </svg>
+        </a>
+    </div>
+    </div>
+```
+10. Memperbaiki tampilan `create_product.html` 
+```python
+    {% extends 'base.html' %}
+    {% load static %}
+
+    {% block meta %}
+    <title>Create Product</title>
+    {% endblock meta %}
+
+    {% block content %}
+    {% include 'navbar.html' %}
+
+    <div class="flex flex-col min-h-screen bg-gray-800">
+    <div class="container mx-auto px-4 py-8 mt-16 max-w-xl">
+        <h1 class="text-3xl font-bold text-center mb-8 text-blue-500">Create Product</h1>
+        <div class="bg-gray-900 shadow-md rounded-lg p-6 form-style">
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="flex flex-col">
+                <label for="{{ field.id_for_label }}" class="mb-2 font-semibold text-blue-400">
+                {{ field.label }}
+                </label>
+                <div class="w-full">
+                {{ field }}
+                </div>
+                {% if field.help_text %}
+                <p class="mt-1 text-sm text-gray-400">{{ field.help_text }}</p>
+                {% endif %}
+                {% for error in field.errors %}
+                <p class="mt-1 text-sm text-red-500">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endfor %}
+            <div class="flex justify-center mt-6">
+            <button type="submit" class="bg-green-500 text-white font-semibold px-6 py-3 rounded-lg hover:bg-green-600 transition duration-300 ease-in-out w-full">
+                Create Product
+            </button>
+            </div>
+        </form>
+        </div>
+    </div>
+    </div>
+
+    {% endblock %}
+
+```
+11. Memperbaiki tampilan `edit_product.html` 
+```python
+    {% extends 'base.html' %}
+    {% load static %}
+
+    {% block meta %}
+    <title>Edit Product</title>
+    {% endblock meta %}
+
+    {% block content %}
+    {% include 'navbar.html' %}
+
+    <div class="flex flex-col min-h-screen bg-gray-800">
+    <div class="container mx-auto px-4 py-8 mt-16 max-w-xl">
+        <h1 class="text-3xl font-bold text-center mb-8 text-blue-500">Edit Product</h1>
+        <div class="bg-gray-900 rounded-lg shadow-md p-6 form-style">
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="flex flex-col">
+                <label for="{{ field.id_for_label }}" class="mb-2 font-semibold text-blue-400">
+                {{ field.label }}
+                </label>
+                <div class="w-full">
+                {{ field }}
+                </div>
+                {% if field.help_text %}
+                <p class="mt-1 text-sm text-gray-400">{{ field.help_text }}</p>
+                {% endif %}
+                {% for error in field.errors %}
+                <p class="mt-1 text-sm text-red-500">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endfor %}
+            <div class="flex justify-center mt-6">
+            <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-3 rounded-lg transition duration-300 ease-in-out w-full">
+                Edit Product
+            </button>
+            </div>
+        </form>
+        </div>
+    </div>
+    </div>
+
+    {% endblock %}
+
+```
+
+
