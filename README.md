@@ -497,7 +497,7 @@ Tidak semua cookies aman untuk digunakan, karena cookies bisa digunakan dalam se
 
 # Tugas 5
 
-### Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+### A. Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
 
 Dalam CSS, jika terdapat beberapa selektor yang berlaku pada suatu elemen HTML, urutan prioritas selektor tersebut diatur berdasarkan aturan yang sudah ditentukan dengan aturan berikut:
 
