@@ -67,7 +67,7 @@ https://dicky-bayu31-toupup.pbp.cs.ui.ac.id/
 
 ### B. Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara urls.py, views.py, models.py, dan berkas html.
 
-![Bagan Request-Response](diagram.jpeg)
+![Bagan Request-Response](./static/image/diagram.jpeg)
 
 Penjelasan:
 1. Client mengakses aplikasi website melalui internet dengan mengirimkan request ke URL utama.
@@ -308,16 +308,16 @@ def show_json_by_id(request, id):
 ```
 ## Screenshot Postman
 ### XML
-![XML](./screenshot_postman/xml.png)
+![XML](./static/image/xml.png)
 
 ### JSON
-![JSON](./screenshot_postman/json.png)
+![JSON](./static/image/json.png)
 
 ### XML by ID
-![XML by ID](./screenshot_postman/xml_by_id.png)
+![XML by ID](./static/image/xml_by_id.png)
 
 ### JSON by ID
-![JSON by ID](./screenshot_postman/json_by_id.png)
+![JSON by ID](./static/image/json_by_id.png)
 
 # Tugas 4
 
