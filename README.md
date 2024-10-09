@@ -1158,7 +1158,7 @@ Dengan pembersihan data di backend, kita dapat memastikan bahwa data yang diteri
         <!-- Modal body -->
         <div class="px-6 py-4 space-y-6 form-style">
             <form id="productForm">
-            
+            <div id="errorMessage" class="hidden bg-red-500 text-white p-2 rounded-lg mb-4"></div>
             <!-- Product Name -->
             <div class="mb-4">
                 <label for="name" class="block text-sm font-medium text-blue-400">Product Name</label>
@@ -1224,15 +1224,15 @@ Dengan pembersihan data di backend, kita dapat memastikan bahwa data yang diteri
     }
 
     function hideModal() {
-        const modal = document.getElementById('crudModal');
         const modalContent = document.getElementById('crudModalContent');
 
         modalContent.classList.remove('opacity-100', 'scale-100');
         modalContent.classList.add('opacity-0', 'scale-95');
 
         setTimeout(() => {
-            modal.classList.add('hidden');
-        }, 150); 
+        document.getElementById('crudModal').classList.add('hidden');
+        }, 150);
+        hideError(); 
     }
 
     document.getElementById("cancelButton").addEventListener("click", hideModal);
@@ -1240,18 +1240,27 @@ Dengan pembersihan data di backend, kita dapat memastikan bahwa data yang diteri
 ```
 7. Menambahkan data product dengan ajax.
 ```python
-  function addProduct() {
-    fetch("{% url 'main:add_product_ajax' %}", {
-      method: "POST",
-      body: new FormData(document.querySelector('#productForm')),
-    })
-    .then(response => refreshProduct())
-
-    document.getElementById("productForm").reset(); 
-    document.querySelector("[data-modal-toggle='crudModal']").click();
-
-    return false;
-  }
+    async function addProduct() {
+        try {
+        const response = await fetch("{% url 'main:add_product_ajax' %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#productForm')),
+            headers: {
+            "X-CSRFToken": "{{ csrf_token }}"
+            }
+        });
+        if (response.ok) {
+            refreshProduct(); 
+            document.getElementById("productForm").reset(); 
+            hideModal(); 
+        } else {
+            const errorData = await response.json();
+            showError(errorData.message || 'Something went wrong.');
+        }
+        } catch (error) {
+            showError('Failed to add the product.');
+        }
+    }
 ```
 8. Menambahkan data product dengan ajax.
 ```python
