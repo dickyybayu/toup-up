@@ -1000,4 +1000,289 @@ implementasi:
 
 ```
 
+# Tugas 6
+
+### A. Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web! 
+
+JavaScript, bersama dengan HTML dan CSS, menjadi tiga teknologi utama yang dipakai pada pengembangan web. Pada dasarnya, keuntungan menggunakan JavaScript dalam pengembangan web adalah manipulasi halaman web dapat dilakukan secara dinamis dan interaksi antara halaman web dengan pengguna dapat meningkat. Oleh karena itu, hampir semua situs web modern saat ini menggunakan JavaScript dalam halaman web mereka untuk memberikan pengalaman terbaik kepada pengguna. Beberapa contoh yang dapat kita lakukan dengan menggunakan JavaScript antara lain menampilkan informasi berdasarkan waktu, mengenali jenis peramban pengguna, melakukan validasi form atau data, membuat cookies (bukan kue, namun HTTP cookies), mengganti styling dan CSS suatu element secara dinamis, dan lain sebagainya.
+
+Pada pengembangan web umumnya kode JavaScript digunakan pada client-side suatu web (client-side JavaScript), namun beberapa jenis kode JavaScript saat ini digunakan pada server-side suatu web (server-side JavaScript) seperti node.js. Istilah client-side menunjukkan bahwa kode JavaScript akan dieksekusi atau dijalankan pada peramban pengguna, bukan pada server situs web. Hal ini berarti kompleksitas kode JavaScript tidak akan memengaruhi performa server situs web tersebut namun memengaruhi performa peramban web dan komputer; semakin kompleks kode JavaScript, maka semakin banyak memori komputer yang dikonsumsi oleh peramban web.
+
+### B. Jelaskan fungsi dari penggunaan `await` ketika kita menggunakan `fetch()`! Apa yang akan terjadi jika kita tidak menggunakan `await`?
+
+Penggunaan `await` dalam `fetch()` berfungsi untuk menunggu hingga operasi asynchronous selesai sebelum melanjutkan eksekusi kode berikutnya. Ketika kita melakukan request menggunakan `fetch()`, ia mengembalikan sebuah Promise yang membutuhkan waktu untuk menyelesaikan permintaan ke server. Dengan menggunakan `await`, kita bisa menunggu selesainya Promise tersebut tanpa perlu menggunakan callback chaining seperti `.then()`.
+
+Jika kita tidak menggunakan `await`, `fetch()` akan langsung mengembalikan sebuah Promise yang belum selesai, dan eksekusi kode akan berlanjut tanpa menunggu hasil dari request tersebut. Akibatnya, kita tidak bisa langsung mendapatkan respons dari request kecuali kita menggunakan `.then()`.
+
+### C. Mengapa kita perlu menggunakan decorator csrf_exempt pada view yang akan digunakan untuk AJAX POST?
+
+Decorator `@csrf_exempt` digunakan dalam Django untuk mengecualikan CSRF protection pada view. CSRF protection bertujuan untuk melindungi aplikasi web dari serangan CSRF, yaitu jenis serangan di mana penyerang membuat permintaan palsu ke server yang terlihat sah tetapi sebenarnya tidak sah/dimanipulasi.
+
+Namun, ketika kita menggunakan AJAX POST request dari sisi klien, CSRF protection bisa menyebabkan permintaan POST tersebut ditolak oleh server jika token CSRF yang benar tidak dikirimkan bersama permintaan. Oleh karena itu, dalam beberapa kasus, kita menggunakan decorator `csrf_exempt` untuk menonaktifkan sementara perlindungan CSRF pada view tertentu agar permintaan AJAX POST dapat berhasil.
+
+### D. Pada tutorial PBP minggu ini, pembersihan data input pengguna dilakukan di belakang (backend) juga. Mengapa hal tersebut tidak dilakukan di frontend saja?
+
+Pembersihan data input pengguna dilakukan tidak hanya di frontend, tetapi juga di backend karena ada beberapa alasan keamanan. Frontend rentan terhadap manipulasi oleh pengguna, seperti pengiriman data langsung ke server tanpa melalui form yang sah atau modifikasi kode validasi di sisi klien. Jika pembersihan data hanya dilakukan di frontend, aplikasi akan rentan terhadap serangan seperti XSS dan SQL Injection. 
+
+Dengan pembersihan data di backend, kita dapat memastikan bahwa data yang diterima selalu valid, sesuai dengan standar, dan tidak mengandung risiko keamanan, terlepas dari bagaimana data tersebut dikirimkan oleh klien. Backend juga memberikan lapisan tambahan untuk memastikan bahwa semua input diperiksa secara konsisten tanpa bergantung pada variasi browser atau perangkat yang diggunakan klien.
+
+### E. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+
+1. Membuat fungsi add product dengan ajax dan menambahkan `strip_tags` untuk mencegah xss.
+```python
+    @csrf_exempt
+    @require_POST
+    def add_product_ajax(request):
+        name = strip_tags(request.POST.get("name"))
+        price = request.POST.get("price")
+        description = strip_tags(request.POST.get("description"))
+        quantity = request.POST.get("quantity")
+        available = request.POST.get("available") == "on"
+        user = request.user
+
+        new_product = Product(
+            name=name, price=price,
+            description=description, quantity=quantity,
+            available=available, 
+            user=user
+        )
+        new_product.save()
+
+        return HttpResponse(b"CREATED", status=201)
+```
+2. Melakukan routing kembali di `urls.py` untuk fungsi add product dengan ajax.
+```python
+    path('create-product-ajax', add_product_ajax, name='add_product_ajax'),
+```
+3. Membuat fungsi asinkronus untuk mendapatkan product di `main.html`.
+```python
+    <script>
+    async function getProduct(){
+      return fetch("{% url 'main:show_json' %}").then((res) => res.json())
+    }
+    </script>
+```
+4.  Membuat fungsi refreshProduct untuk me-refresh data product secara asinkronus dan juga menambahkan DOMPurify untuk membersihkan data yang tidak sesuai.
+```python
+    <script>
+    async function refreshProduct() {
+        document.getElementById("product_cards").innerHTML = "";
+        document.getElementById("product_cards").className = "";
+        const product = await getProduct();
+        let htmlString = "";
+        let classNameString = "";
+
+        if (product.length === 0) {
+            classNameString = "flex flex-col items-center justify-center min-h-[24rem] p-6";
+            htmlString = `
+                <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+                    <img src="{% static 'image/not_available.png' %}" alt="No products available" class="w-32 h-32 mb-4"/>
+                    <p class="text-center text-gray-400 mt-4">No products available.</p>
+                </div>
+            `;
+        }
+        else {
+            classNameString = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full"
+            product.forEach((item) => {
+                const name = DOMPurify.sanitize(item.fields.name);
+                const description = DOMPurify.sanitize(truncateWords(item.fields.description, 20));
+                htmlString += `
+                <div class="bg-gray-900 shadow-lg rounded-lg overflow-hidden border border-blue-500 transition-transform duration-300 hover:scale-105 hover:border-blue-400">
+                    <div class="bg-gray-900 text-white p-4 border-b border-blue-500">
+                    <h3 class="text-xl font-bold mb-2">${ name }</h3>
+                    </div>
+                    
+                    <div class="p-4 space-y-4">
+                    <div class="space-y-1">
+                        <p class="text-blue-400 font-semibold">Price:</p>
+                        <p class="text-white">${ item.fields.price }</p>
+                    </div>
+
+                    <div class="space-y-1">
+                        <p class="text-blue-400 font-semibold">Description:</p>
+                        <p class="text-gray-300">${description}</p>
+                    </div>
+
+                    <div class="space-y-1">
+                        <p class="text-blue-400 font-semibold">Quantity:</p>
+                        <p class="text-white">${item.fields.quantity}</p>
+                    </div>
+
+                    <div class="space-y-1">
+                        <p class="text-blue-400 font-semibold">Availability:</p>
+                        ${item.fields.available ?
+                        `<span class="text-green-500 font-bold">In Stock</span>` : 
+                        `<span class="text-red-500 font-bold">Out of Stock</span>`
+                        }
+                    </div>
+                    </div>
+
+                    <div class="flex justify-between item-center bg-gray-900 p-4 rounded-b-lg border-t border-blue-500">
+                    <a href="/edit-product/${item.pk}" class="bg-yellow-500 hover:bg-yellow-600 text-white rounded-full p-2 transition duration-300 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                        </svg>
+                    </a>
+                    <a href="/delete/${item.pk}" class="bg-red-500 hover:bg-red-600 text-white rounded-full p-2 transition duration-300 shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                    </div>
+                </div>
+                `;
+            });
+        }
+        document.getElementById("product_cards").className = classNameString;
+        document.getElementById("product_cards").innerHTML = htmlString;
+    }
+    refreshProduct();
+    </script>
+```
+5. Membuat modal sebagai form untuk menambahkan product.
+```python
+    <div id="crudModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 w-full flex items-center justify-center bg-gray-800 bg-opacity-50 overflow-x-hidden overflow-y-auto transition-opacity duration-300 ease-out">
+        <div id="crudModalContent" class="relative bg-gray-900 rounded-lg shadow-lg w-5/6 sm:w-3/4 md:w-1/2 lg:w-1/3 mx-4 sm:mx-0 transform scale-95 opacity-0 transition-transform transition-opacity duration-300 ease-out">
+        <!-- Modal header -->
+        <div class="flex items-center justify-between p-4 border-b rounded-t">
+            <h3 class="text-xl font-semibold text-blue-400">
+            Add New Product
+            </h3>
+            <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" id="closeModalBtn">
+            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+            </svg>
+            <span class="sr-only">Close modal</span>
+            </button>
+        </div>
+        <!-- Modal body -->
+        <div class="px-6 py-4 space-y-6 form-style">
+            <form id="productForm">
+            
+            <!-- Product Name -->
+            <div class="mb-4">
+                <label for="name" class="block text-sm font-medium text-blue-400">Product Name</label>
+                <input type="text" id="name" name="name" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product name" required>
+            </div>
+            
+            <!-- Product Description -->
+            <div class="mb-4">
+                <label for="description" class="block text-sm font-medium text-blue-400">Description</label>
+                <textarea id="description" name="description" rows="3" class="mt-1 block w-full h-52 resize-none border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product description" required></textarea>
+            </div>
+            
+            <!-- Product Price -->
+            <div class="mb-4">
+                <label for="price" class="block text-sm font-medium text-blue-400">Price</label>
+                <input type="number" id="price" name="price" min="0.01" step="0.01" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product price" required>
+            </div>
+            
+            <!-- Product Quantity -->
+            <div class="mb-4">
+                <label for="quantity" class="block text-sm font-medium text-blue-400">Quantity</label>
+                <input type="number" id="quantity" name="quantity" min="1" class="mt-1 block w-full border border-gray-300 rounded-md p-2 hover:border-indigo-700" placeholder="Enter product quantity" required>
+            </div>
+            
+            <!-- Availability -->
+            <div class="mb-4 flex flex-col">
+                <label for="available" class="block text-sm font-medium text-blue-400">Available</label>
+                <input 
+                type="checkbox" 
+                id="available" 
+                name="available" 
+                class="mt-2 h-5 w-5 border border-gray-300 rounded-md focus:outline-none transition duration-200"
+                {% if form.available.value %} checked {% endif %}
+                />
+            </div>
+            
+
+            </form>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="flex flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 p-6 border-t border-gray-200 rounded-b justify-center md:justify-end">
+            <button type="button" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg" id="cancelButton">Cancel</button>
+            <button type="submit" id="submitProduct" form="productForm" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg">Save Product</button>
+        </div>
+        </div>
+    </div>
+```
+6. Menambahkan fungsi-fungsi berikut agar modal dapat berfungsi.
+```python
+    const modal = document.getElementById('crudModal');
+    const modalContent = document.getElementById('crudModalContent');
+
+    function showModal() {
+        const modal = document.getElementById('crudModal');
+        const modalContent = document.getElementById('crudModalContent');
+
+        modal.classList.remove('hidden'); 
+        setTimeout(() => {
+            modalContent.classList.remove('opacity-0', 'scale-95');
+            modalContent.classList.add('opacity-100', 'scale-100');
+        }, 50); 
+    }
+
+    function hideModal() {
+        const modal = document.getElementById('crudModal');
+        const modalContent = document.getElementById('crudModalContent');
+
+        modalContent.classList.remove('opacity-100', 'scale-100');
+        modalContent.classList.add('opacity-0', 'scale-95');
+
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 150); 
+    }
+
+    document.getElementById("cancelButton").addEventListener("click", hideModal);
+    document.getElementById("closeModalBtn").addEventListener("click", hideModal);  
+```
+7. Menambahkan data product dengan ajax.
+```python
+  function addProduct() {
+    fetch("{% url 'main:add_product_ajax' %}", {
+      method: "POST",
+      body: new FormData(document.querySelector('#productForm')),
+    })
+    .then(response => refreshProduct())
+
+    document.getElementById("productForm").reset(); 
+    document.querySelector("[data-modal-toggle='crudModal']").click();
+
+    return false;
+  }
+```
+8. Menambahkan data product dengan ajax.
+```python
+  function addProduct() {
+    fetch("{% url 'main:add_product_ajax' %}", {
+      method: "POST",
+      body: new FormData(document.querySelector('#productForm')),
+    })
+    .then(response => refreshProduct())
+
+    document.getElementById("productForm").reset(); 
+    document.querySelector("[data-modal-toggle='crudModal']").click();
+
+    return false;
+  }
+  document.getElementById("productForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    addProduct();
+  })  
+```
+9. Menambahkan method berikut untuk membersihkan input untuk mencegah serangan xss.
+```python
+    def clean_name(self):
+        name = self.cleaned_data["name"]
+        return strip_tags(name)
+
+    def clean_description(self):
+        description = self.cleaned_data["description"]
+        return strip_tags(description)
+```
+
+
+
 
